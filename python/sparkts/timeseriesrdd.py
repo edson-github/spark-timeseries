@@ -21,19 +21,19 @@ class TimeSeriesRDD(RDD):
     """
 
     def __init__(self, dt_index, rdd, jtsrdd = None, sc = None):
-        if jtsrdd == None:
+        if jtsrdd is None:
             # Construct from a Python RDD object and a Python DateTimeIndex
             jvm = rdd.ctx._jvm
             jrdd = rdd._reserialize(_TimeSeriesSerializer())._jrdd.mapToPair( \
-                jvm.com.cloudera.sparkts.BytesToKeyAndSeries())
+                    jvm.com.cloudera.sparkts.BytesToKeyAndSeries())
             self._jtsrdd = jvm.com.cloudera.sparkts.api.java.JavaTimeSeriesRDDFactory.timeSeriesRDD( \
-                dt_index._jdt_index, jrdd)
+                    dt_index._jdt_index, jrdd)
             RDD.__init__(self, rdd._jrdd, rdd.ctx)
         else:
             # Construct from a py4j.JavaObject pointing to a JavaTimeSeriesRDD and a Python SparkContext
             jvm = sc._jvm
             jrdd = jtsrdd.map( \
-                jvm.com.cloudera.sparkts.KeyAndSeriesToBytes())
+                    jvm.com.cloudera.sparkts.KeyAndSeriesToBytes())
             RDD.__init__(self, jrdd, sc, _TimeSeriesSerializer())
             self._jtsrdd = jtsrdd
 
@@ -88,8 +88,8 @@ class TimeSeriesRDD(RDD):
         dt_index : DateTimeIndex
             A DateTimeIndex for the produced TimeseriesRDD.
         """
-        if dt_index == None:
-          dt_index = self.index()
+        if dt_index is None:
+            dt_index = self.index()
         return TimeSeriesRDD(dt_index, self.map(fn))
 
     def to_instants(self):

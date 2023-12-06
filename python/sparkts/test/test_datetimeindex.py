@@ -45,5 +45,7 @@ class DateTimeIndexTestCase(PySparkTestCase):
         self.assertEqual(subbydate[pd.to_datetime('2015-04-13')], 0)
 
         pd_index2 = dt_index.to_pandas_index()
-        self.assertTrue(pd_index.equals(pd_index2), str(pd_index) + "!=" + str(pd_index2))
+        self.assertTrue(
+            pd_index.equals(pd_index2), f"{str(pd_index)}!={str(pd_index2)}"
+        )
 

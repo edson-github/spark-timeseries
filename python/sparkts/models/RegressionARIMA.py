@@ -97,11 +97,11 @@ class RegressionARIMAModel(PyModel):
         assert sc != None, "Missing SparkContext"
 
         self._ctx = sc
-        if jmodel == None:
+        if jmodel is None:
             self._jmodel = self._ctx._jvm.com.cloudera.sparkts.models.RegressionARIMAModel(_py2java_double_array(self._ctx, regressionCoeff), _py2java_int_array(self._ctx, arimaOrders), _py2scala_arraybuffer(self._ctx, arimaCoeff))
         else:
             self._jmodel = jmodel
-            
+
         self.regressionCoeff = _java2py(sc, self._jmodel.regressionCoeff())
         self.arimaOrders = _java2py(sc, self._jmodel.arimaOrders())
         self.arimaCoeff = _java2py(sc, self._jmodel.arimaCoeff())

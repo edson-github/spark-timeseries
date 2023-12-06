@@ -68,13 +68,13 @@ class ARXModel(PyModel):
     """
     def __init__(self, c=0.0, coefficients=[], yMaxLag=0, xMaxLag=0, includesOriginalX=True, jmodel=None, sc=None):
         assert sc != None, "Missing SparkContext"
-        
+
         self._ctx = sc
-        if jmodel == None:
+        if jmodel is None:
             self._jmodel = self._ctx._jvm.com.cloudera.sparkts.models.ARXModel(float(c), _py2java_double_array(self._ctx, coefficients), yMaxLag, xMaxLag, includesOriginalX)
         else:
             self._jmodel = jmodel
-        
+
         self.c = self._jmodel.c()
         self.coefficients = _java2py(self._ctx, self._jmodel.coefficients())
         self.yMaxLag = self._jmodel.yMaxLag()

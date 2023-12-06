@@ -37,11 +37,11 @@ def fit_model(ts, sc=None):
 class EWMAModel(PyModel):
     def __init__(self, smoothing=0.0, jmodel=None, sc=None):
         assert sc != None, "Missing SparkContext"
-        
+
         self._ctx = sc
-        if jmodel == None:
+        if jmodel is None:
             self._jmodel = self._ctx._jvm.com.cloudera.sparkts.models.EWMAModel(smoothing)
         else:
             self._jmodel = jmodel
-        
+
         self.smoothing = self._jmodel.smoothing()

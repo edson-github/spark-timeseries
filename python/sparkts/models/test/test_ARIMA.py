@@ -10,7 +10,7 @@ from sparkts.models.ARIMA import ARIMAModel, fit_model
 
 def data_file_as_nparray(fn):
     dn = os.path.dirname(os.path.realpath(__file__))
-    with open(dn + '/' + fn) as f:
+    with open(f'{dn}/{fn}') as f:
         lines = f.readlines()
     values = [float(l) for l in lines]
     return np.array(values)

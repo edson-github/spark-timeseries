@@ -39,14 +39,12 @@ class DateTimeIndex(object):
         return pd.Timestamp(self._zdt_to_nanos(self._jdt_index.dateTimeAtLoc(loc)))
 
     def __getitem__(self, val):
-        # TODO: throw an error if the step size is defined
-        if isinstance(val, slice):
-            start = datetime_to_nanos(val.start)
-            stop = datetime_to_nanos(val.stop)
-            jdt_index = self._jdt_index.slice(start, stop)
-            return DateTimeIndex(jdt_index)
-        else:
+        if not isinstance(val, slice):
             return self._jdt_index.locAtDateTime(datetime_to_nanos(val))
+        start = datetime_to_nanos(val.start)
+        stop = datetime_to_nanos(val.stop)
+        jdt_index = self._jdt_index.slice(start, stop)
+        return DateTimeIndex(jdt_index)
 
     def islice(self, start, end):
         """
@@ -143,7 +141,7 @@ def uniform(start, end=None, periods=None, freq=None, sc=None):
     dtmodule = sc._jvm.com.cloudera.sparkts.__getattr__('DateTimeIndex$').__getattr__('MODULE$')
     if freq is None:
         raise ValueError("Missing frequency")
-    elif end is None and periods == None:
+    elif end is None and periods is None:
         raise ValueError("Need an end date or number of periods")
     elif end is not None:
         return DateTimeIndex(dtmodule.uniformFromInterval( \

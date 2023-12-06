@@ -25,13 +25,13 @@ def fit_model(ts, maxLag=1, noIntercept=False, sc=None):
 class ARModel(PyModel):
     def __init__(self, c=0, coefficients=None, jmodel=None, sc=None):
         assert sc != None, "Missing SparkContext"
-        
+
         self._ctx = sc
-        if jmodel == None:
+        if jmodel is None:
             self._jmodel = self._ctx._jvm.com.cloudera.sparkts.models.ARModel(c, _py2java_double_array(self._ctx, coefficients))
         else:
             self._jmodel = jmodel
-        
+
         self.c = self._jmodel.c()
         self.coefficients = _java2py(self._ctx, self._jmodel.coefficients())
 

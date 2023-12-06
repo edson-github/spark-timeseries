@@ -72,15 +72,19 @@ class TimeSeriesRDDTestCase(PySparkTestCase):
 
         obsdf = tsrdd.to_observations_dataframe(sql_ctx)
         tsrdd_from_df = time_series_rdd_from_observations( \
-            dt_index, obsdf, 'timestamp', 'key', 'value')
-        
+                dt_index, obsdf, 'timestamp', 'key', 'value')
+
         ts1 = tsrdd.collect()
         ts1.sort(key = lambda x: x[0])
         ts2 = tsrdd_from_df.collect()
         ts2.sort(key = lambda x: x[0])
-        self.assertTrue(all([pair[0][0] == pair[1][0] and (pair[0][1] == pair[1][1]).all() \
-            for pair in zip(ts1, ts2)]))
-        
+        self.assertTrue(
+            all(
+                pair[0][0] == pair[1][0] and (pair[0][1] == pair[1][1]).all()
+                for pair in zip(ts1, ts2)
+            )
+        )
+
         df1 = obsdf.collect()
         df1.sort(key = lambda x: x.value)
         df2 = tsrdd_from_df.to_observations_dataframe(sql_ctx).collect()
@@ -94,7 +98,7 @@ class TimeSeriesRDDTestCase(PySparkTestCase):
         dt_index = uniform(start, periods=4, freq=DayFrequency(1, self.sc), sc=self.sc)
         rdd = self.sc.parallelize(zip(labels, vecs), 3)
         tsrdd = TimeSeriesRDD(dt_index, rdd)
-        filtered = tsrdd.filter(lambda x: x[0] == 'a' or x[0] == 'b')
+        filtered = tsrdd.filter(lambda x: x[0] in ['a', 'b'])
         self.assertEquals(filtered.count(), 2)
         # assert it has TimeSeriesRDD functionality:
         filtered['2015-04-10':'2015-04-15'].count()
