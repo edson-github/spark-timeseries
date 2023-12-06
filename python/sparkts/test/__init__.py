@@ -7,11 +7,10 @@ def run_cmd(cmd):
     unsuccessful, print the failed command and its output.
     """
     try:
-        out = sub.check_output(cmd, shell=True, stderr=sub.STDOUT)
-        return out
+        return sub.check_output(cmd, shell=True, stderr=sub.STDOUT)
     except sub.CalledProcessError as err:
-        logging.error("The failed test setup command was [%s]." % err.cmd)
-        logging.error("The output of the command was [%s]" % err.output)
+        logging.error(f"The failed test setup command was [{err.cmd}].")
+        logging.error(f"The output of the command was [{err.output}]")
         raise
 
 CHECK_SPARK_HOME = """
@@ -23,12 +22,13 @@ fi
 os.system(CHECK_SPARK_HOME)
 
 # Dynamically load project root dir and jars.
-project_root = os.getcwd() + "/../"
-jars = run_cmd("ls %s/target/sparkts*jar-with-dependencies.jar" % project_root)
+project_root = f"{os.getcwd()}/../"
+jars = run_cmd(f"ls {project_root}/target/sparkts*jar-with-dependencies.jar")
 
 # Set environment variables.
-os.environ["PYSPARK_SUBMIT_ARGS"] = \
-    ("--jars %s --driver-class-path %s pyspark-shell") % (jars, jars)
+os.environ[
+    "PYSPARK_SUBMIT_ARGS"
+] = f"--jars {jars} --driver-class-path {jars} pyspark-shell"
 
-os.environ["SPARK_CONF_DIR"] = "%s/test/resources/conf" % os.getcwd()
+os.environ["SPARK_CONF_DIR"] = f"{os.getcwd()}/test/resources/conf"
 

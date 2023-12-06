@@ -26,13 +26,13 @@ def fit_model(ts, sc=None):
 class ARGARCHModel(PyModel):
     def __init__(self, c=0.0, phi=0.0, omega=0.0, alpha=0.0, beta=0.0, jmodel=None, sc=None):
         assert sc != None, "Missing SparkContext"
-        
+
         self._ctx = sc
-        if jmodel == None:
+        if jmodel is None:
             self._jmodel = self._ctx._jvm.com.cloudera.sparkts.models.ARGARCHModel(c, phi, omega, alpha, beta)
         else:
             self._jmodel = jmodel
-        
+
         self.c = self._jmodel.c()
         self.phi = self._jmodel.phi()
         self.omega = self._jmodel.omega()

@@ -108,11 +108,11 @@ class ARIMAModel(PyModel):
         assert sc != None, "Missing SparkContext"
 
         self._ctx = sc
-        if jmodel == None:
+        if jmodel is None:
             self._jmodel = self._ctx._jvm.com.cloudera.sparkts.models.ARIMAModel(p, d, q, _py2java_double_array(self._ctx, coefficients), hasIntercept)
         else:
             self._jmodel = jmodel
-            
+
         self.p = _java2py(sc, self._jmodel.p())
         self.d = _java2py(sc, self._jmodel.d())
         self.q = _java2py(sc, self._jmodel.q())

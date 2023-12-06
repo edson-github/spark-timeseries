@@ -26,13 +26,13 @@ def fit_model(ts, sc=None):
 class GARCHModel(PyModel):
     def __init__(self, omega=0.0, alpha=0.0, beta=0.0, jmodel=None, sc=None):
         assert sc != None, "Missing SparkContext"
-        
+
         self._ctx = sc
-        if jmodel == None:
+        if jmodel is None:
             self._jmodel = self._ctx._jvm.com.cloudera.sparkts.models.GARCHModel(omega, alpha, beta)
         else:
             self._jmodel = jmodel
-        
+
         self.omega = self._jmodel.omega()
         self.alpha = self._jmodel.alpha()
         self.beta = self._jmodel.beta()

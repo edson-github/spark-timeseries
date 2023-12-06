@@ -6,13 +6,12 @@ import re
 VERSION_FILE="sparkts/_version.py"
 verstrline = open(VERSION_FILE, "rt").read()
 VERSION_REGEX = r"^__version__ = ['\"]([^'\"]*)['\"]"
-mo = re.search(VERSION_REGEX, verstrline, re.M)
-if mo:
+if mo := re.search(VERSION_REGEX, verstrline, re.M):
     version_string = mo.group(1)
 else:
-    raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
+    raise RuntimeError(f"Unable to find version string in {VERSIONFILE}.")
 
-JAR_FILE = 'sparkts-' + version_string + '-SNAPSHOT-jar-with-dependencies.jar'
+JAR_FILE = f'sparkts-{version_string}-SNAPSHOT-jar-with-dependencies.jar'
 
 setup(
     name='sparkts',
